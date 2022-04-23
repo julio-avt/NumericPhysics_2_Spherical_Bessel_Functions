@@ -1,0 +1,1516 @@
+\documentclass[9pt]{article}
+	\usepackage[a4paper, total={7in, 8in}]{geometry}
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Tarea2\_Explicacion}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{fuxedsica-numuxe9rica}{%
+\section{Física Numérica}\label{fuxedsica-numuxe9rica}}
+
+    \hypertarget{tarea-2}{%
+\subsection{Tarea 2}\label{tarea-2}}
+
+    \begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{La fórmula cuádratica}
+
+  Recuerde que la para la ecuación cuadrática: \[ax^2 + bx + c = 0\]
+  tenemos las soluciones:
+  \[x_{1,2} = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a}  \tag{1} \] o también:
+  \[x_{1,2}' = \dfrac{2c}{-b \pm \sqrt{b^2 - 4ac}} \tag{2}  \] Una
+  rápida inspección muestra que debemos tener cuidado con la cancelación
+  sustractiva cuando \(b^2 \gg 4ac\).
+
+  \begin{enumerate}
+  \def\labelenumii{(\alph{enumii})}
+  \tightlist
+  \item
+    Escriba un programa que calcule las cuatro soluciones para valores
+    arbitrarios de \(a\), \(b\) y \(c\).
+  \item
+    Investigue cómo los errores en las respuestas calculadas se vuelven
+    grandes debido a la cancelación sustractiva (Sugerencia: pruebe con
+    \(a = 1\), \(b = 1\) y \(c = 10^{-n},\,\,n = 1,2,3,...\).
+  \end{enumerate}
+\end{enumerate}
+
+    \begin{itemize}
+\tightlist
+\item
+  \emph{Solución}:
+\end{itemize}
+
+\begin{quote}
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\tightlist
+\item
+  Primeramente asumiremos \(a\neq 0\), ya que de forma contraria
+  tendríamos una ecuación de la forma \(bx+c=0\) cuya solución es
+  trivial. De esta manera, realizaremos dos funciones (una para cada
+  tipo de solucón) cuyos parámetros serán los valores de \(a\), \(b\) y
+  \(c\), y como resultado nos arrojarán el valor de las raíces
+  dependiendo de la fórmula usada. Las funciones son:
+\end{enumerate}
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{50}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{raices\PYZus{}1}\PY{p}{(} \PY{n}{a}\PY{p}{:}\PY{n+nb}{float} \PY{p}{,} \PY{n}{b}\PY{p}{:} \PY{n+nb}{float}\PY{p}{,} \PY{n}{c}\PY{p}{:} \PY{n+nb}{float} \PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{list}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Esta función calcula las raíces de la ecuación cuadrática}
+\PY{l+s+sd}{    ax\PYZca{}2 + bx + c = 0 usando la fórmula 1 y regresa los valores de las }
+\PY{l+s+sd}{    raices\PYZdq{}\PYZdq{}\PYZdq{}}
+    
+    
+    \PY{n}{x1} \PY{o}{=} \PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{b} \PY{o}{+} \PY{p}{(}\PY{n}{b}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{\PYZhy{}} \PY{l+m+mi}{4}\PY{o}{*}\PY{n}{a}\PY{o}{*}\PY{n}{c}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{/}\PY{l+m+mi}{2}\PY{p}{)} \PY{p}{)}\PY{o}{/} \PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{a}\PY{p}{)}
+    \PY{n}{x2} \PY{o}{=} \PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{b} \PY{o}{\PYZhy{}} \PY{p}{(}\PY{n}{b}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{\PYZhy{}} \PY{l+m+mi}{4}\PY{o}{*}\PY{n}{a}\PY{o}{*}\PY{n}{c}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{/}\PY{l+m+mi}{2}\PY{p}{)} \PY{p}{)}\PY{o}{/} \PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{a}\PY{p}{)}
+    \PY{k}{return} \PY{n}{x1}\PY{p}{,}\PY{n}{x2}
+        
+\PY{k}{def} \PY{n+nf}{raices\PYZus{}2}\PY{p}{(} \PY{n}{a} \PY{p}{,} \PY{n}{b}\PY{p}{,} \PY{n}{c} \PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{list}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Esta función calcula las raíces de la ecuación cuadrática}
+\PY{l+s+sd}{    ax\PYZca{}2 + bx + c = 0 usando la fórmula 2 y regresa los valores de las raices}
+\PY{l+s+sd}{    en forma de lista\PYZdq{}\PYZdq{}\PYZdq{}}
+    
+    
+    \PY{n}{x1} \PY{o}{=} \PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{c}\PY{p}{)}\PY{o}{/}\PY{p}{(} \PY{n}{b} \PY{o}{+} \PY{p}{(}\PY{n}{b}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{\PYZhy{}} \PY{l+m+mi}{4}\PY{o}{*}\PY{n}{a}\PY{o}{*}\PY{n}{c}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{/}\PY{l+m+mi}{2}\PY{p}{)} \PY{p}{)}
+    \PY{n}{x2} \PY{o}{=} \PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{c}\PY{p}{)}\PY{o}{/}\PY{p}{(} \PY{n}{b} \PY{o}{\PYZhy{}} \PY{p}{(}\PY{n}{b}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{\PYZhy{}} \PY{l+m+mi}{4}\PY{o}{*}\PY{n}{a}\PY{o}{*}\PY{n}{c}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{/}\PY{l+m+mi}{2}\PY{p}{)} \PY{p}{)}
+    \PY{k}{return} \PY{n}{x1}\PY{p}{,}\PY{n}{x2}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{quote}
+Veamos un ejemplo del uso de las funciones. Tomemos la ecuación:
+\[x^2 + x + 2 =0\] Cuyas raíces son
+\(x_{1,2}=\dfrac{-1\pm\sqrt{7} i}{2}\). Usando el programa obtenemos:
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{51}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{a} \PY{o}{=} \PY{l+m+mi}{1}
+\PY{n}{b} \PY{o}{=} \PY{l+m+mi}{1}
+\PY{n}{c} \PY{o}{=} \PY{l+m+mi}{2}
+\PY{n}{r1}\PY{p}{,}\PY{n}{r2} \PY{o}{=} \PY{n}{raices\PYZus{}1}\PY{p}{(}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{,}\PY{n}{c}\PY{p}{)}
+\PY{n}{s1}\PY{p}{,}\PY{n}{s2} \PY{o}{=} \PY{n}{raices\PYZus{}2}\PY{p}{(}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{,}\PY{n}{c}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Las raíces usando la fórmula (1) son: x\PYZus{}1 = }\PY{l+s+si}{\PYZob{}}\PY{n}{r1}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.8}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ y x\PYZus{}2 = }\PY{l+s+si}{\PYZob{}}\PY{n}{r2}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.8}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Las raíces usando la fórmula (2) son: x}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZus{}1 = }\PY{l+s+si}{\PYZob{}}\PY{n}{s1}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.8}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ y x}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZus{}2 = }\PY{l+s+si}{\PYZob{}}\PY{n}{s2}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.8}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Las raíces usando la fórmula (1) son: x\_1 = (-0.5+1.3228757j) y x\_2 =
+(-0.5-1.3228757j)
+Las raíces usando la fórmula (2) son: x'\_1 = (-0.5+1.3228757j) y x'\_2 =
+(-0.5-1.3228757j)
+    \end{Verbatim}
+
+    \emph{Nota: python utiliza \(j\) como el número imaginario.}
+
+    \begin{quote}
+Podemos ver que nuestras funciones definidas obtienen una aproximación
+adecuada para la ecuación cuadrática que hemos ingresado.
+\end{quote}
+
+    \begin{quote}
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Para este inciso imprimamos en una tabla las raíces calculadas por las
+  fórmulas (1) y (2) para cada valor de \(a\), \(b\) y \(c\), sugerido.
+  Además compararemos los resultados para ver como difieren. Para ello
+  nos apoyaremos de la libreria \emph{PrettyTable} para que la tabla sea
+  visualmente mejor.
+\end{enumerate}
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{65}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{prettytable} \PY{k+kn}{import} \PY{n}{PrettyTable}
+
+\PY{n}{tabla} \PY{o}{=} \PY{n}{PrettyTable}\PY{p}{(}\PY{p}{)} \PY{c+c1}{\PYZsh{}Define la tabla}
+\PY{n}{tabla}\PY{o}{.}\PY{n}{title} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Raíces de la ecuación x\PYZca{}2 + x + 10\PYZca{}(\PYZhy{}n) = 0}\PY{l+s+s2}{\PYZdq{}} \PY{c+c1}{\PYZsh{} Agrega el título a la tabla}
+\PY{n}{tabla}\PY{o}{.}\PY{n}{field\PYZus{}names} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x\PYZus{}1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZus{}1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{|x\PYZus{}1\PYZhy{}x}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZus{}1|}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x\PYZus{}2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZus{}2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{|x\PYZus{}2\PYZhy{}x}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZus{}2|}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{c+c1}{\PYZsh{} Le damos nombre a los compos }
+\PY{n}{n} \PY{o}{=} \PY{l+m+mi}{16} \PY{c+c1}{\PYZsh{}valor del exponente máximo de c = 10\PYZca{}(\PYZhy{}n) }
+\PY{n}{a} \PY{o}{=} \PY{l+m+mi}{1}
+\PY{n}{b} \PY{o}{=} \PY{l+m+mi}{1}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{n}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+    \PY{n}{c} \PY{o}{=} \PY{l+m+mi}{10}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{i}\PY{p}{)}
+    \PY{n}{r1}\PY{p}{,}\PY{n}{r2} \PY{o}{=} \PY{n}{raices\PYZus{}1}\PY{p}{(}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{,}\PY{n}{c}\PY{p}{)}
+    \PY{n}{s1}\PY{p}{,}\PY{n}{s2} \PY{o}{=} \PY{n}{raices\PYZus{}2}\PY{p}{(}\PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{,}\PY{n}{c}\PY{p}{)}
+    
+    \PY{n}{tabla}\PY{o}{.}\PY{n}{add\PYZus{}row}\PY{p}{(}\PY{p}{[}\PY{n}{i}\PY{p}{,}
+                  \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{r1}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.3e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{s1}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.3e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n+nb}{abs}\PY{p}{(}\PY{n}{r1}\PY{o}{\PYZhy{}}\PY{n}{s1}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.3e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                  \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{r2}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.3e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{s2}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.3e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n+nb}{abs}\PY{p}{(}\PY{n}{r2}\PY{o}{\PYZhy{}}\PY{n}{s2}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.3e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{c+c1}{\PYZsh{}Inserta un elemento a la tabla}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{tabla}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
++-------------------------------------------------------------------------------
+---+
+|                   Raíces de la ecuación x\^{}2 + x + 10\^{}(-n) = 0
+|
++----+------------+------------+------------+------------+------------+---------
+---+
+| n  |    x\_1     |    x'\_1    | |x\_1-x'\_1| |    x\_2     |    x'\_2    |
+|x\_2-x'\_2| |
++----+------------+------------+------------+------------+------------+---------
+---+
+| 1  | -1.127e-01 | -1.127e-01 | 1.388e-17  | -8.873e-01 | -8.873e-01 |
+1.110e-16  |
+| 2  | -1.010e-02 | -1.010e-02 | 2.082e-17  | -9.899e-01 | -9.899e-01 |
+1.998e-15  |
+| 3  | -1.001e-03 | -1.001e-03 | 2.429e-17  | -9.990e-01 | -9.990e-01 |
+2.420e-14  |
+| 4  | -1.000e-04 | -1.000e-04 | 5.557e-18  | -9.999e-01 | -9.999e-01 |
+5.562e-14  |
+| 5  | -1.000e-05 | -1.000e-05 | 1.663e-17  | -1.000e+00 | -1.000e+00 |
+1.662e-12  |
+| 6  | -1.000e-06 | -1.000e-06 | 4.634e-18  | -1.000e+00 | -1.000e+00 |
+4.634e-12  |
+| 7  | -1.000e-07 | -1.000e-07 | 5.119e-18  | -1.000e+00 | -1.000e+00 |
+5.119e-11  |
+| 8  | -1.000e-08 | -1.000e-08 | 5.759e-18  | -1.000e+00 | -1.000e+00 |
+5.759e-10  |
+| 9  | -1.000e-09 | -1.000e-09 | 2.623e-17  | -1.000e+00 | -1.000e+00 |
+2.623e-08  |
+| 10 | -1.000e-10 | -1.000e-10 | 8.264e-18  | -1.000e+00 | -1.000e+00 |
+8.264e-08  |
+| 11 | -1.000e-11 | -1.000e-11 | 8.273e-19  | -1.000e+00 | -1.000e+00 |
+8.273e-08  |
+| 12 | -1.000e-12 | -1.000e-12 | 3.339e-17  | -1.000e+00 | -1.000e+00 |
+3.339e-05  |
+| 13 | -9.998e-14 | -1.000e-13 | 2.442e-17  | -1.000e+00 | -1.000e+00 |
+2.442e-04  |
+| 14 | -9.992e-15 | -1.000e-14 | 7.993e-18  | -1.000e+00 | -1.001e+00 |
+7.999e-04  |
+| 15 | -9.992e-16 | -1.000e-15 | 7.993e-19  | -1.000e+00 | -1.001e+00 |
+7.999e-04  |
+| 16 | -1.110e-16 | -1.000e-16 | 1.102e-17  | -1.000e+00 | -9.007e-01 |
+9.928e-02  |
++----+------------+------------+------------+------------+------------+---------
+---+
+    \end{Verbatim}
+
+    \begin{quote}
+Recordemos que para las columnas 4,5,7 y 8 se han usado las ecuaciones
+(1) y (2). Llamenos raíces positivas a \(x_1\) y \(x_1'\) ya que para
+estas se toma el signo positivo. Mientras que para \(x_2\) y \(x_2'\)
+nos referiremos a ellas como raíces negativas.
+\end{quote}
+
+\begin{quote}
+Primeramente notemos que para \(n<11\) obtenemos valores muy cercanos
+para las raíces obtenidas por ambos métodos. Sin embargo, a partir de
+\(n=12\) la diferencia empieza a ser notoria. Esto se de que a que para
+la raiz \(x_1\) tenemos la fórmula:
+\[x_1=\dfrac{-b+\sqrt{b^2-4ac}}{2a}\] Y para los valores que hemos
+tomado, a partir de \(n=12\) podemos hacer la suposición de que
+\(b^2\gg 4ac\). Por lo que \(\sqrt{b^2-4ac}\approx |b|\). De esa forma
+tendríamos: \[x_1\approx\dfrac{-b+|b|}{2a}\] Y como b\textgreater0,
+entonces el numerador sería la recta de dos números muy cercanos entre
+sí. Por lo que el numerador tendría el problema de que la computadora lo
+pueda interpretar como cero. Por otro lado, para \(x_1'\) tenemos la
+ecuación \(x_1' = frac{-2c}{b+\sqrt{b^2-4ac}}\) y tomando \(b^2\gg 4ac\)
+obtenemos la aproxiamción: \[x_1'\approx\dfrac{-2c}{b+|b|}\] En este
+caso no se tendría ese problema, debido a que esta vez se suman los
+números y no se restan.
+\end{quote}
+
+\begin{quote}
+Ahora, si analizamos a \(x_2\) y \(x_2'\) tenemos un caso parecido. Solo
+que esta vez las aproximaciones para la suposición de que \(b^2\gg 4ac\)
+reultan:
+\[x_2\approx\dfrac{-b-|b|}{2a}\quad;\quad x_1'\approx\dfrac{-2c}{b-|b|}\]
+En \(x_2\) no hay tanto problema para los valores que consideramos. Sin
+embargo, para \(x_2'\) ocurre lo mismo que con \(x_1\). Solo que esta
+vez este número cercano a cero está dividiendo, esto ocasionaria que
+nuetros resultados comiencen a diverger y nos den raices erróneas o
+simplemente el programa marque error al intentar dividir por un número
+que la computadora interpreta como cero.
+\end{quote}
+
+\begin{quote}
+Por estas razones, las diferencias se vuelven cada vez más grandes.
+Ocasionando que nuestros errores sean mayores.
+\end{quote}
+
+    \begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\item
+  \textbf{Funciones de Bessel esféricas}
+
+  \begin{enumerate}
+  \def\labelenumii{(\alph{enumii})}
+  \tightlist
+  \item
+    Escriba un programa que utilice las fórmulas de recursión hacia
+    arriba (\emph{up}) y hacía abajo (\emph{down}) para calcular
+    \(j_l(x)\) para los primeros 25 valores de \(l\) para
+    \(x=0.1,1,10\).
+    \[j_{l+1}(x) = \dfrac{2l+1}{x} j_l(x) - j_{l-1}(x),\quad up \tag{3}\]
+    \[j_{l-1}(x) = \dfrac{2l+1}{x} j_l(x) - j_{l-+}(x),\quad down \tag {4}\]
+  \item
+    Ajsute su programa para que al menor un método de ``buenos'' valores
+    (error relativo de \(10^{-10}\).
+  \item
+    Compare los metodos con las distintas fórmulas de recursión,
+    imprimiendo una tabla con columnas: \(l\), \(j_{l}^{up}\),
+    \(j_l^{down}\) y
+    \(\dfrac{|j_{l}^{up}-j_l^{down}|}{|j_{l}^{up}| + |j_l^{down}|}\).
+  \end{enumerate}
+\end{enumerate}
+
+    \begin{itemize}
+\tightlist
+\item
+  \emph{Solución}:
+\end{itemize}
+
+\begin{quote}
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\tightlist
+\item
+  Primeramente exportamos las librerías que requerimos:
+\end{enumerate}
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{53}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{collections} \PY{k+kn}{import} \PY{n}{deque} 
+\PY{k+kn}{from} \PY{n+nn}{numpy} \PY{k+kn}{import} \PY{n}{sin}\PY{p}{,} \PY{n}{cos}
+\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{special} \PY{k+kn}{import} \PY{n}{spherical\PYZus{}jn}
+\PY{k+kn}{from} \PY{n+nn}{prettytable} \PY{k+kn}{import} \PY{n}{PrettyTable}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{quote}
+De la librería \emph{collections} se importó \emph{deque} que es como
+una lista que permite controlar de mejor manera el insertar elementos al
+inicio o al final de la misma. De \emph{numpy} las funciones \(\sin\) y
+\(\cos\) que se ocuparan para los valores de \(j_0(x)\) y \(j_1(x)\). De
+\emph{scipy} se importaron las funciones de Bessel esféricas para
+comparar nuestro programa con estas. Finalmete de \emph{prettytabble}
+solo la usaremos para hacer nuestras tablas visualmente mejor.
+\end{quote}
+
+\begin{quote}
+Para resolver esta parte se crearon 2 funciones. La primer función
+calcula el valor numérico de \(j_l(x)\) para un \(l\) y \(x\) dados como
+parámentros, usando la relación de recurrencia \emph{up}. Mientras que
+la segunda función tiene el mismo objetivo, pero en lugar de usar la
+relación \emph{up}, utiliza la relación \emph{down} apoyándose del
+algoritmo de Miller. Las funciones creadas fueron las siguientes:
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{54}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{bessel\PYZus{}esf\PYZus{}up}\PY{p}{(}\PY{n}{l}\PY{p}{:} \PY{n+nb}{int}\PY{p}{,} \PY{n}{x}\PY{p}{:} \PY{n+nb}{float}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{float}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Esta función utiliza una relación de recurrencia para calcular el valor}
+\PY{l+s+sd}{    numérico de la función de bessel esférica siguente a partir de las dos }
+\PY{l+s+sd}{    anteriores\PYZdq{}\PYZdq{}\PYZdq{}}
+
+    
+    \PY{n}{j} \PY{o}{=} \PY{p}{[}\PY{n}{sin}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{o}{/}\PY{n}{x}\PY{p}{,} \PY{n}{sin}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{o}{/}\PY{n}{x}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{\PYZhy{}} \PY{n}{cos}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{o}{/}\PY{n}{x}\PY{p}{]}
+    
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range} \PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{l}\PY{p}{)}\PY{p}{:}
+        \PY{n}{j\PYZus{}sig} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{/}\PY{n}{x} \PY{o}{*} \PY{n}{j}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{j}\PY{p}{[}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+        \PY{n}{j}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{j\PYZus{}sig}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{j}\PY{p}{[}\PY{n}{l}\PY{p}{]}
+
+\PY{k}{def} \PY{n+nf}{bessel\PYZus{}esf\PYZus{}down}\PY{p}{(}\PY{n}{l}\PY{p}{:} \PY{n+nb}{int}\PY{p}{,} \PY{n}{x} \PY{o}{=} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{float}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Esta función utiliza el algoritmo de Miller para obtener obtener }
+\PY{l+s+sd}{    los valores numéricos de las primeros l\PYZlt{}50 funciones de Bessel esféricas\PYZdq{}\PYZdq{}\PYZdq{}}
+    
+    \PY{n}{n} \PY{o}{=} \PY{l+m+mi}{25}
+    \PY{n}{j} \PY{o}{=} \PY{n}{deque}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}\PY{c+c1}{\PYZsh{}En la posición 0 siempre tendremos al j\PYZus{}99 y en 1 al j\PYZus{}100}
+    
+    
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+        \PY{n}{j\PYZus{}ant} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{p}{(}\PY{n}{n} \PY{o}{\PYZhy{}} \PY{n}{i}\PY{p}{)} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}\PY{o}{/}\PY{n}{x} \PY{o}{*} \PY{n}{j}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{j}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+        \PY{n}{j}\PY{o}{.}\PY{n}{appendleft}\PY{p}{(}\PY{n}{j\PYZus{}ant}\PY{p}{)}        
+        
+    \PY{n}{normalizacion} \PY{o}{=} \PY{p}{(}\PY{n}{sin}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{o}{/}\PY{n}{x}\PY{p}{)}\PY{o}{/}\PY{n}{j}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    \PY{n}{j}\PY{p}{[}\PY{n}{l}\PY{p}{]} \PY{o}{=} \PY{n}{j}\PY{p}{[}\PY{n}{l}\PY{p}{]}\PY{o}{*}\PY{n}{normalizacion}
+    \PY{k}{return} \PY{n}{j}\PY{p}{[}\PY{n}{l}\PY{p}{]}     
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{quote}
+En la función \emph{bessel\_esf\_up} lo que se hace es crear una lista,
+donde el elemento 0 es \(j_0(x)=\frac{\sin x}{x}\) y el elemento 1 es
+\(j_1(x)=\frac{\sin x}{x^2}-\frac{\cos x}{x}\). Luego de ello, con un
+ciclo \emph{for} corremos un contador que va de 1 hasta el parámentro
+dado \(l\), el cual se usará para calcular la función \(j_l(x)\) usando
+la relación \emph{up}. Todos los valores calculdos se irán guardando en
+la lista. De forma que al final de iterar el ciclo for, el elemento
+\(l\) de la lista será el valor del \(j_l(x)\) buscado.
+\end{quote}
+
+\begin{quote}
+Por otro lado, en la función \emph{bessel\_esf\_down} se crea una
+\emph{deque} que es como una especie de lista. En esta especie de lista
+ingresamos los valores de \(j_{25}(x)=1\) y \(j_{26}(x)=2\) en las
+posiciones 0 y 1. Estos valores se tomaron arbitrariamente para aplicar
+el algoritmo de Miller. Después de ello, con un ciclo \emph{for} que va
+de 1 a 24 usamos nuestra relación de recurrencia \emph{down}, la cual se
+ha ajustado para los valores que toma la variable \(i\). El
+\(j_{l-1}(x)\) obtenido de esta relación se agrega al inicio de la
+lista, tomando la posición 0 y recorriendo el resto de los elementos a
+la siguiente posición. Por ejemplo, al calcular el \(j_{24}(x)\) e
+insertarlo en la lista, se agregará en la posición 0 y el \(j_{25}(x)\)
+se recorrerá a la posición 1. Luego, para el cálculo de \(j_{23}(x)\) se
+requerirá de \(j_{24}(x)\) y \(j_{25}(x)\) cuyas posiciones serán
+j{[}0{]} y j{[}1{]} en la lista. Y así sucesivamente. Esa es la razón
+por la que al definir la variable \emph{j\_ant} se usan las posiciones 0
+y 1 de la lista.
+\end{quote}
+
+\begin{quote}
+Una vez que termine de iterar ese ciclo for, en la lista tendremos los
+valorer numéricos de usar la relación \emph{down} a partir de los
+valores \(j_{25}(x)=1\) y \(j_{26}(x)=2\). Sin embargo, estos valores
+aún no nos sirven. Debemos normalizarlos de la siguiente forma:
+\[j_l^N (x) = j_l^C\times\dfrac{j_0(x)}{j_0^C(x)}\]
+\end{quote}
+
+\begin{quote}
+Donde \(j_l^N (x)\) es el valor numérico normalizado (la aproximación
+deseada), \(j_l^C\) es el valor numérico que ya contiene la lista en la
+posición \(l\), \(j_0^C(x)\) es el valor numérico de la lista en la
+posición 0 y \(j_0(x)=\frac{\sin x }{x}\) es la primer función esférica
+de Bessel que deberá calcularse para el \(x\) dado. Como queremos que
+esta función nos devuelva el valor numérico de la función \(j_l(x)\)
+para un \(l\) y \(x\) dados, solo normalizamos el elemento en la
+posición \(l\) de la lista y lo regresamos como resultado de nuestra
+función.
+\end{quote}
+
+    \begin{quote}
+Lo sigueinte que haremos, será crear dos funciones cuyo obejtivo será
+imprimir una tabla con los valores numéricos de las primeras 25
+funciones de Bessel esféricas para un \(x\) dado y a su vez lo comparará
+con el valor numérico obtenido por las funciones de Bessel esféricas de
+la librería \emph{scipy}. Las funciones son:
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{60}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{tabla\PYZus{}bessel\PYZus{}up}\PY{p}{(}\PY{n}{x}\PY{p}{:} \PY{n+nb}{float}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Esta función imprime una tabla con los valores numéticos para las}
+\PY{l+s+sd}{    primeras 25 funciones de bessel esféricas calculadas por la relación de }
+\PY{l+s+sd}{    recurrencia up y también ponr la función de bessel integrada por la }
+\PY{l+s+sd}{    librería scipy. Además las compara y obtiene el error relativo.\PYZdq{}\PYZdq{}\PYZdq{}}
+    
+    \PY{n}{tabla} \PY{o}{=} \PY{n}{PrettyTable}\PY{p}{(}\PY{p}{)} \PY{c+c1}{\PYZsh{} Define la tabla}
+    \PY{n}{tabla}\PY{o}{.}\PY{n}{title} \PY{o}{=} \PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Bessel esférico método up: x = }\PY{l+s+si}{\PYZob{}}\PY{n}{x}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{c+c1}{\PYZsh{} Agrega título a la tabla}
+    \PY{n}{tabla}\PY{o}{.}\PY{n}{field\PYZus{}names} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{j\PYZus{}l}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Up}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Scipy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Error relativo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{c+c1}{\PYZsh{} Le da nombre a las columnas}
+
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{26}\PY{p}{)}\PY{p}{:}
+        \PY{n}{error} \PY{o}{=} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{bessel\PYZus{}esf\PYZus{}up}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{x}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{spherical\PYZus{}jn}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{n}{spherical\PYZus{}jn}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{x}\PY{p}{)}
+        \PY{n}{tabla}\PY{o}{.}\PY{n}{add\PYZus{}row}\PY{p}{(}\PY{p}{[}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{j\PYZus{}}\PY{l+s+si}{\PYZob{}}\PY{n}{i}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                    \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{bessel\PYZus{}esf\PYZus{}up}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.8e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                    \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{spherical\PYZus{}jn}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.8e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+                    \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{error}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.8e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{c+c1}{\PYZsh{}Insertamos un registro. El número de elementos debe coincidir con el número de columnas   }
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{tabla}\PY{p}{)} \PY{c+c1}{\PYZsh{}Imprime la tabla}
+    
+\PY{k}{def} \PY{n+nf}{tabla\PYZus{}bessel\PYZus{}down}\PY{p}{(}\PY{n}{x}\PY{p}{:} \PY{n+nb}{float}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Esta función imprime una tabla con los valores numéricos para las}
+\PY{l+s+sd}{    primeras 25 funciones de bessel esféricas calculadas por el algoritmo de }
+\PY{l+s+sd}{    Miller.\PYZdq{}\PYZdq{}\PYZdq{}}
+    
+    \PY{n}{tabla} \PY{o}{=} \PY{n}{PrettyTable}\PY{p}{(}\PY{p}{)} \PY{c+c1}{\PYZsh{} Define la tabla}
+    \PY{n}{tabla}\PY{o}{.}\PY{n}{title} \PY{o}{=} \PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Bessel esférico método down: x = }\PY{l+s+si}{\PYZob{}}\PY{n}{x}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{c+c1}{\PYZsh{} Agrega título a la tabla}
+    \PY{n}{tabla}\PY{o}{.}\PY{n}{field\PYZus{}names} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{j\PYZus{}l}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Down}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Scipy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Error relativo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{26}\PY{p}{)}\PY{p}{:}
+        \PY{n}{error} \PY{o}{=} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{bessel\PYZus{}esf\PYZus{}down}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{x}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{spherical\PYZus{}jn}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{n}{spherical\PYZus{}jn}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{x}\PY{p}{)}
+        \PY{n}{tabla}\PY{o}{.}\PY{n}{add\PYZus{}row}\PY{p}{(}\PY{p}{[}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{j\PYZus{}}\PY{l+s+si}{\PYZob{}}\PY{n}{i}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                    \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{bessel\PYZus{}esf\PYZus{}down}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.8e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                    \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{spherical\PYZus{}jn}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.8e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+                    \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{error}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.8e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{c+c1}{\PYZsh{}Insertamos un registro. El número de elementos debe coincidir con el número de columnas   }
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{tabla}\PY{p}{)} \PY{c+c1}{\PYZsh{}Imprime la tabla   }
+    
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{quote}
+Las funciones anteriores son análogas. En lo único que difieren es en
+que una llama a la función \emph{bessel\_esf\_up} para mostrar las
+aproximaciones calculadas por la relación \emph{up} y la otra usa la
+función \emph{bessel\_esf\_down} para mostrar los valores numéricos
+obtenidos por el mecanismo de Miller. Además, ambas funciones utilizan
+el elemento \emph{PrettyTable} para crear la tabla y que se vea mejor.
+Se ha puesto un comentario a lado de cada comando de la librería
+\emph{prettytable} para explicar como editar la tabla e imprimirla.
+\end{quote}
+
+\begin{quote}
+Veamos el resultado de estas funcines para los valores que se piden: \$
+x=0.1,1,10\$.
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{61}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{tabla\PYZus{}bessel\PYZus{}up}\PY{p}{(}\PY{l+m+mf}{0.1}\PY{p}{)}
+\PY{n}{tabla\PYZus{}bessel\PYZus{}down}\PY{p}{(}\PY{l+m+mf}{0.1}\PY{p}{)}
+\PY{n}{tabla\PYZus{}bessel\PYZus{}up}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{tabla\PYZus{}bessel\PYZus{}down}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{tabla\PYZus{}bessel\PYZus{}up}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{tabla\PYZus{}bessel\PYZus{}down}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
++----------------------------------------------------------+
+|            Bessel esférico método up: x = 0.1            |
++------+-----------------+----------------+----------------+
+| j\_l  |        Up       |     Scipy      | Error relativo |
++------+-----------------+----------------+----------------+
+| j\_0  |  9.98334166e-01 | 9.98334166e-01 | 0.00000000e+00 |
+| j\_1  |  3.33000119e-02 | 3.33000119e-02 | 4.95932780e-14 |
+| j\_2  |  6.66190608e-04 | 6.66190608e-04 | 7.35572052e-11 |
+| j\_3  |  9.51851727e-06 | 9.51851972e-06 | 2.57234097e-07 |
+| j\_4  |  1.05600670e-07 | 1.05772015e-07 | 1.61994783e-03 |
+| j\_5  | -1.44569836e-08 | 9.61631023e-10 | 1.60338157e+01 |
+| j\_6  | -1.69586887e-06 | 7.39754109e-12 | 2.29248644e+05 |
+| j\_7  | -2.20448496e-04 | 4.93188748e-14 | 4.46986061e+09 |
+| j\_8  | -3.30655785e-02 | 2.90120010e-16 | 1.13972071e+14 |
+| j\_9  | -5.62092789e+00 | 1.52698569e-18 | 3.68106127e+18 |
+| j\_10 | -1.06794323e+03 | 7.27151100e-21 | 1.46866756e+23 |
+| j\_11 | -2.24262458e+05 | 3.16158151e-23 | 7.09336318e+27 |
+| j\_12 | -5.15792975e+07 | 1.26465134e-25 | 4.07853896e+32 |
+| j\_13 | -1.28946001e+10 | 4.68395367e-28 | 2.75293076e+37 |
+| j\_14 | -3.48149045e+12 | 1.61517440e-30 | 2.15548887e+42 |
+| j\_15 | -1.00961934e+15 | 5.21029094e-33 | 1.93774080e+47 |
+| j\_16 | -3.12978513e+17 | 1.57888971e-35 | 1.98226963e+52 |
+| j\_17 | -1.03281900e+20 | 4.51114830e-38 | 2.28948136e+57 |
+| j\_18 | -3.61483519e+22 | 1.21923772e-40 | 2.96483215e+62 |
+| j\_19 | -1.33747869e+25 | 3.12627012e-43 | 4.27819299e+67 |
+| j\_20 | -5.21613074e+27 | 7.62509231e-46 | 6.84074439e+72 |
+| j\_21 | -2.13860023e+30 | 1.77328645e-48 | 1.20600946e+78 |
+| j\_22 | -9.19592883e+32 | 3.94065518e-51 | 2.33360404e+83 |
+| j\_23 | -4.13814659e+35 | 8.38440913e-54 | 4.93552560e+88 |
+| j\_24 | -1.94491970e+38 | 1.71111075e-56 | 1.13664162e+94 |
+| j\_25 | -9.53006515e+40 | 3.35513153e-59 | 2.84044457e+99 |
++------+-----------------+----------------+----------------+
++---------------------------------------------------------+
+|           Bessel esférico método down: x = 0.1          |
++------+----------------+----------------+----------------+
+| j\_l  |      Down      |     Scipy      | Error relativo |
++------+----------------+----------------+----------------+
+| j\_0  | 9.98334166e-01 | 9.98334166e-01 | 0.00000000e+00 |
+| j\_1  | 3.33000119e-02 | 3.33000119e-02 | 6.25125353e-16 |
+| j\_2  | 6.66190608e-04 | 6.66190608e-04 | 9.76479247e-16 |
+| j\_3  | 9.51851972e-06 | 9.51851972e-06 | 1.77975772e-16 |
+| j\_4  | 1.05772015e-07 | 1.05772015e-07 | 3.12816433e-15 |
+| j\_5  | 9.61631023e-10 | 9.61631023e-10 | 4.30092516e-16 |
+| j\_6  | 7.39754109e-12 | 7.39754109e-12 | 4.36790310e-16 |
+| j\_7  | 4.93188748e-14 | 4.93188748e-14 | 1.91941339e-15 |
+| j\_8  | 2.90120010e-16 | 2.90120010e-16 | 1.52948519e-15 |
+| j\_9  | 1.52698569e-18 | 1.52698569e-18 | 2.39639894e-15 |
+| j\_10 | 7.27151100e-21 | 7.27151100e-21 | 4.96611866e-15 |
+| j\_11 | 3.16158151e-23 | 3.16158151e-23 | 7.43611606e-16 |
+| j\_12 | 1.26465134e-25 | 1.26465134e-25 | 4.90166404e-15 |
+| j\_13 | 4.68395367e-28 | 4.68395367e-28 | 7.27581464e-15 |
+| j\_14 | 1.61517440e-30 | 1.61517440e-30 | 1.95206260e-15 |
+| j\_15 | 5.21029094e-33 | 5.21029094e-33 | 8.92992130e-15 |
+| j\_16 | 1.57888971e-35 | 1.57888971e-35 | 2.36993791e-15 |
+| j\_17 | 4.51114830e-38 | 4.51114830e-38 | 9.25749849e-15 |
+| j\_18 | 1.21923772e-40 | 1.21923772e-40 | 3.67946853e-15 |
+| j\_19 | 3.12627012e-43 | 3.12627012e-43 | 8.91769022e-15 |
+| j\_20 | 7.62509231e-46 | 7.62509231e-46 | 1.04055717e-14 |
+| j\_21 | 1.77328645e-48 | 1.77328645e-48 | 1.33655435e-14 |
+| j\_22 | 3.94065518e-51 | 3.94065518e-51 | 3.76506543e-15 |
+| j\_23 | 8.38440913e-54 | 8.38440913e-54 | 6.67737338e-14 |
+| j\_24 | 1.71111078e-56 | 1.71111075e-56 | 1.57396531e-08 |
+| j\_25 | 3.36832830e-59 | 3.35513153e-59 | 3.93330950e-03 |
++------+----------------+----------------+----------------+
++----------------------------------------------------------+
+|             Bessel esférico método up: x = 1             |
++------+-----------------+----------------+----------------+
+| j\_l  |        Up       |     Scipy      | Error relativo |
++------+-----------------+----------------+----------------+
+| j\_0  |  8.41470985e-01 | 8.41470985e-01 | 0.00000000e+00 |
+| j\_1  |  3.01168679e-01 | 3.01168679e-01 | 5.52957413e-16 |
+| j\_2  |  6.20350520e-02 | 6.20350520e-02 | 2.34894253e-15 |
+| j\_3  |  9.00658112e-03 | 9.00658112e-03 | 7.56942415e-14 |
+| j\_4  |  1.01101581e-03 | 1.01101581e-03 | 4.58188899e-12 |
+| j\_5  |  9.25611586e-05 | 9.25611586e-05 | 4.42941880e-10 |
+| j\_6  |  7.15693586e-06 | 7.15693631e-06 | 6.23673410e-08 |
+| j\_7  |  4.79007658e-07 | 4.79013420e-07 | 1.20281993e-05 |
+| j\_8  |  2.81790093e-08 | 2.82649880e-08 | 3.04187902e-03 |
+| j\_9  |  3.55007135e-11 | 1.49137650e-09 | 9.76196009e-01 |
+| j\_10 | -2.75044958e-08 | 7.11655264e-11 | 3.87486227e+02 |
+| j\_11 | -5.77629912e-07 | 3.09955185e-12 | 1.86360170e+05 |
+| j\_12 | -1.32579835e-05 | 1.24166260e-13 | 1.06776057e+08 |
+| j\_13 | -3.30871957e-04 | 4.60463768e-15 | 7.18562416e+10 |
+| j\_14 | -8.92028486e-03 | 1.58957599e-16 | 5.61173856e+13 |
+| j\_15 | -2.58357389e-01 | 5.13268612e-18 | 5.03357079e+16 |
+| j\_16 | -8.00015878e+00 | 1.55670827e-19 | 5.13915094e+19 |
+| j\_17 | -2.63746882e+02 | 4.45117750e-21 | 5.92532834e+22 |
+| j\_18 | -9.22314072e+03 | 1.20385574e-22 | 7.66133383e+25 |
+| j\_19 | -3.40992460e+05 | 3.08874236e-24 | 1.10398479e+29 |
+| j\_20 | -1.32894828e+07 | 7.53779572e-26 | 1.76304629e+32 |
+| j\_21 | -5.44527802e+08 | 1.75388258e-27 | 3.10469930e+35 |
+| j\_22 | -2.34014060e+10 | 3.89936131e-29 | 6.00134333e+38 |
+| j\_23 | -1.05251874e+12 | 8.30011892e-31 | 1.26807670e+42 |
+| j\_24 | -4.94449795e+13 | 1.69458017e-32 | 2.91783064e+45 |
+| j\_25 | -2.42175148e+15 | 3.32393637e-34 | 7.28579374e+48 |
++------+-----------------+----------------+----------------+
++---------------------------------------------------------+
+|            Bessel esférico método down: x = 1           |
++------+----------------+----------------+----------------+
+| j\_l  |      Down      |     Scipy      | Error relativo |
++------+----------------+----------------+----------------+
+| j\_0  | 8.41470985e-01 | 8.41470985e-01 | 0.00000000e+00 |
+| j\_1  | 3.01168679e-01 | 3.01168679e-01 | 3.68638276e-16 |
+| j\_2  | 6.20350520e-02 | 6.20350520e-02 | 1.11854406e-16 |
+| j\_3  | 9.00658112e-03 | 9.00658112e-03 | 0.00000000e+00 |
+| j\_4  | 1.01101581e-03 | 1.01101581e-03 | 1.07238894e-15 |
+| j\_5  | 9.25611586e-05 | 9.25611586e-05 | 1.02491900e-15 |
+| j\_6  | 7.15693631e-06 | 7.15693631e-06 | 1.65691865e-15 |
+| j\_7  | 4.79013420e-07 | 4.79013420e-07 | 1.10517904e-15 |
+| j\_8  | 2.82649880e-08 | 2.82649880e-08 | 1.99003380e-15 |
+| j\_9  | 1.49137650e-09 | 1.49137650e-09 | 4.15981785e-16 |
+| j\_10 | 7.11655264e-11 | 7.11655264e-11 | 3.99552072e-15 |
+| j\_11 | 3.09955185e-12 | 3.09955185e-12 | 3.12739495e-15 |
+| j\_12 | 1.24166260e-13 | 1.24166260e-13 | 1.62643533e-15 |
+| j\_13 | 4.60463768e-15 | 4.60463768e-15 | 5.48220093e-15 |
+| j\_14 | 1.58957599e-16 | 1.58957599e-16 | 1.55084774e-15 |
+| j\_15 | 5.13268612e-18 | 5.13268612e-18 | 2.70164496e-15 |
+| j\_16 | 1.55670827e-19 | 1.55670827e-19 | 4.02083835e-15 |
+| j\_17 | 4.45117750e-21 | 4.45117750e-21 | 5.07045417e-15 |
+| j\_18 | 1.20385574e-22 | 1.20385574e-22 | 4.10105306e-15 |
+| j\_19 | 3.08874236e-24 | 3.08874236e-24 | 3.56787917e-16 |
+| j\_20 | 7.53779572e-26 | 7.53779572e-26 | 1.27925025e-14 |
+| j\_21 | 1.75388258e-27 | 1.75388258e-27 | 4.90886783e-15 |
+| j\_22 | 3.89936131e-29 | 3.89936131e-29 | 3.33764906e-12 |
+| j\_23 | 8.30011897e-31 | 8.30011892e-31 | 7.03989579e-09 |
+| j\_24 | 1.69460762e-32 | 1.69458017e-32 | 1.61986990e-05 |
+| j\_25 | 3.45838291e-34 | 3.32393637e-34 | 4.04479883e-02 |
++------+----------------+----------------+----------------+
++------------------------------------------------------------+
+|             Bessel esférico método up: x = 10              |
++------+-----------------+-----------------+-----------------+
+| j\_l  |        Up       |      Scipy      |  Error relativo |
++------+-----------------+-----------------+-----------------+
+| j\_0  | -5.44021111e-02 | -5.44021111e-02 | -0.00000000e+00 |
+| j\_1  |  7.84669418e-02 |  7.84669418e-02 |  0.00000000e+00 |
+| j\_2  |  7.79421936e-02 |  7.79421936e-02 |  0.00000000e+00 |
+| j\_3  | -3.94958450e-02 | -3.94958450e-02 | -0.00000000e+00 |
+| j\_4  | -1.05589285e-01 | -1.05589285e-01 | -0.00000000e+00 |
+| j\_5  | -5.55345116e-02 | -5.55345116e-02 | -2.49894838e-16 |
+| j\_6  |  4.45013223e-02 |  4.45013223e-02 |  3.11851133e-16 |
+| j\_7  |  1.13386231e-01 |  1.13386231e-01 |  0.00000000e+00 |
+| j\_8  |  1.25578024e-01 |  1.25578024e-01 |  2.21022555e-16 |
+| j\_9  |  1.00096410e-01 |  1.00096410e-01 |  5.54576847e-16 |
+| j\_10 |  6.46051545e-02 |  6.46051545e-02 |  3.65175805e-15 |
+| j\_11 |  3.55744149e-02 |  3.55744149e-02 |  2.92579397e-15 |
+| j\_12 |  1.72159997e-02 |  1.72159997e-02 |  6.04573711e-16 |
+| j\_13 |  7.46558448e-03 |  7.46558448e-03 |  1.20828612e-14 |
+| j\_14 |  2.94107834e-03 |  2.94107834e-03 |  8.49348951e-14 |
+| j\_15 |  1.06354271e-03 |  1.06354271e-03 |  5.97179242e-13 |
+| j\_16 |  3.55904074e-04 |  3.55904074e-04 |  4.82904640e-12 |
+| j\_17 |  1.10940728e-04 |  1.10940728e-04 |  4.53984692e-11 |
+| j\_18 |  3.23884744e-05 |  3.23884744e-05 |  4.91200361e-10 |
+| j\_19 |  8.89662722e-06 |  8.89662727e-06 |  6.05033705e-09 |
+| j\_20 |  2.30837177e-06 |  2.30837196e-06 |  8.40498801e-08 |
+| j\_21 |  5.67697030e-07 |  5.67697772e-07 |  1.30641308e-06 |
+| j\_22 |  1.32725463e-07 |  1.32728458e-07 |  2.25653727e-05 |
+| j\_23 |  2.95675538e-08 |  2.95802899e-08 |  4.30562185e-04 |
+| j\_24 |  6.24203967e-09 |  6.29890453e-09 |  9.02773771e-03 |
+| j\_25 |  1.01844059e-09 |  1.28434224e-09 |  2.07033330e-01 |
++------+-----------------+-----------------+-----------------+
++------------------------------------------------------------+
+|            Bessel esférico método down: x = 10             |
++------+-----------------+-----------------+-----------------+
+| j\_l  |       Down      |      Scipy      |  Error relativo |
++------+-----------------+-----------------+-----------------+
+| j\_0  | -5.44021111e-02 | -5.44021111e-02 | -0.00000000e+00 |
+| j\_1  |  7.84669418e-02 |  7.84669418e-02 |  1.59175428e-15 |
+| j\_2  |  7.79421936e-02 |  7.79421936e-02 |  3.56104625e-16 |
+| j\_3  | -3.94958450e-02 | -3.94958450e-02 | -2.98667357e-15 |
+| j\_4  | -1.05589285e-01 | -1.05589285e-01 | -1.05145425e-15 |
+| j\_5  | -5.55345116e-02 | -5.55345116e-02 | -4.99789677e-16 |
+| j\_6  |  4.45013223e-02 |  4.45013223e-02 |  3.27443690e-15 |
+| j\_7  |  1.13386231e-01 |  1.13386231e-01 |  1.34633337e-15 |
+| j\_8  |  1.25578024e-01 |  1.25578024e-01 |  6.63067664e-16 |
+| j\_9  |  1.00096410e-01 |  1.00096410e-01 |  2.77288424e-16 |
+| j\_10 |  6.46051545e-02 |  6.46051545e-02 |  4.29618594e-15 |
+| j\_11 |  3.55744149e-02 |  3.55744149e-02 |  6.43674673e-15 |
+| j\_12 |  1.72159997e-02 |  1.72159997e-02 |  1.47112936e-14 |
+| j\_13 |  7.46558448e-03 |  7.46558448e-03 |  5.19330667e-14 |
+| j\_14 |  2.94107834e-03 |  2.94107834e-03 |  2.72204542e-13 |
+| j\_15 |  1.06354271e-03 |  1.06354271e-03 |  1.81865444e-12 |
+| j\_16 |  3.55904074e-04 |  3.55904074e-04 |  1.45980257e-11 |
+| j\_17 |  1.10940728e-04 |  1.10940728e-04 |  1.37107577e-10 |
+| j\_18 |  3.23884744e-05 |  3.23884744e-05 |  1.48331509e-09 |
+| j\_19 |  8.89662743e-06 |  8.89662727e-06 |  1.82704900e-08 |
+| j\_20 |  2.30837255e-06 |  2.30837196e-06 |  2.53809213e-07 |
+| j\_21 |  5.67700012e-07 |  5.67697772e-07 |  3.94503423e-06 |
+| j\_22 |  1.32737503e-07 |  1.32728458e-07 |  6.81416689e-05 |
+| j\_23 |  2.96187499e-08 |  2.95802899e-08 |  1.30018796e-03 |
+| j\_24 |  6.47062189e-09 |  6.29890453e-09 |  2.72614648e-02 |
+| j\_25 |  2.08729738e-09 |  1.28434224e-09 |  6.25187840e-01 |
++------+-----------------+-----------------+-----------------+
+    \end{Verbatim}
+
+    \begin{quote}
+Como podemos ver, los valores calculados por el método \emph{up} no son
+buenos. El error relativo es muy grande. A pesar de que para \(x=10\)
+fue pequeño, sigue siendo significativo. Por lo que usar la relación de
+recurrencia \emph{up} a partir de \(j_0\) y \(j_1\) no es adecuado
+realizarlo numéricamente. Para valores pequeños de \(l\), las
+aproximaciones empiezan a diverger y arrojan cosas complétamente
+erróneas.
+\end{quote}
+
+\begin{quote}
+Por otro lado, para las funciones calculadas por el mecanismo de Miller
+podemos observar que para valores pequeños de \(l\) tenemos errores
+relativos muy pequeños. Este error va aumentando conforme aumenta \(l\),
+pero aún así para \(l=25\) tenemos un error no tan grande en comparación
+con el otro método. Por lo que, los valores calculados a través de este
+mecanismo si son adecuados. Para obtener aproximaciones más certeras y
+con ello errores sumamente pequeños, debemos comenzar a usar la relación
+de recurrencia \emph{down} a partir de \(j_l(x)\) y \(j_l(x)\) con
+\(l>25\) si es que se quieren los primeros 25 valores de \(j_l\). Ya que
+en nuestra función \emph{bessel\_esf\_down} comenzamos a partir de
+\(l=25\) y eso ocasionó que tuvieramos errores más grandes para las
+\(l's\) cercanas a 25. Así que, si se quiere tener errores más pequeños
+debemos modificar el valor de \(l\) con el que se comienza a utilizar la
+relación *down. Esto se realizará en el siguiente inciso.
+\end{quote}
+
+    \begin{quote}
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Para resolver este inciso, solo ajustaremos a la función
+  \emph{bessel\_esf\_down} ya que al usar el mecanismo de Miller
+  presenta buanas aproximaciones. Para lograr que nuestros errores
+  relativos sean menores a \(10^{-10}\), como ya se dijo anterioremnte,
+  debemos comenzar a usar la relación de recurrencia \emph{down} a
+  partir de un \(l\) más grande. El problema es encontrar la mímina
+  \(l\) que cumpla eso.
+\end{enumerate}
+\end{quote}
+
+\begin{quote}
+La forma en como se resolvió, fue usar un ciclo while dentro de la
+función ajustada. Este ciclo while evaluaría el error relativo del valor
+numérico de \(j_{25}(x)\) y se repetiría si este error es mayor al
+solicitado. La razón de porque se evalua solo para \(l=25\) es que como
+solo nos interesan los primeros 25 valores de \(l\), si \(j_{25}\)
+cumple, automaticamente todas las funciones anteriores lo harán ya que
+entre más pequeña sea \(l\) mayor es la convergencia al valor deseado.
+El código ajustado para calcular los valores numéricos de las primeras
+25 funciones eféricas de Bessel y el código ajsutado para imprimir estos
+valores en forma de tabla son los siguientes:
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{57}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{bessel\PYZus{}esf\PYZus{}down\PYZus{}ajuste}\PY{p}{(}\PY{n}{x}\PY{p}{:} \PY{n+nb}{float}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n}{deque}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Esta función utiliza una el algoritmo de Miller para obtener obtener }
+\PY{l+s+sd}{    los valores numéricos de las primeros 25 funciones de Bessel esféricas }
+\PY{l+s+sd}{    con un error relativo menor a 10\PYZca{}(\PYZhy{}10)\PYZdq{}\PYZdq{}\PYZdq{}}
+    
+    \PY{n}{n} \PY{o}{=} \PY{l+m+mi}{25}  \PY{c+c1}{\PYZsh{}Se inicia en 25 porque queremos los primeros 25 valores}
+    \PY{n}{error} \PY{o}{=} \PY{l+m+mi}{1}
+    \PY{n}{j} \PY{o}{=} \PY{n}{deque}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    
+    \PY{k}{while} \PY{n}{error} \PY{o}{\PYZgt{}} \PY{l+m+mi}{10}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{:}
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+            \PY{n}{j\PYZus{}ant} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{p}{(}\PY{n}{n} \PY{o}{\PYZhy{}} \PY{n}{i}\PY{p}{)} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}\PY{o}{/}\PY{n}{x} \PY{o}{*} \PY{n}{j}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{j}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+            \PY{n}{j}\PY{o}{.}\PY{n}{appendleft}\PY{p}{(}\PY{n}{j\PYZus{}ant}\PY{p}{)}   
+        
+        \PY{n}{normalizacion} \PY{o}{=} \PY{p}{(}\PY{n}{sin}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{o}{/}\PY{n}{x}\PY{p}{)}\PY{o}{/}\PY{n}{j}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{26}\PY{p}{)}\PY{p}{:}
+            \PY{n}{j}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{j}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{*}\PY{n}{normalizacion}
+        
+        \PY{n}{error} \PY{o}{=} \PY{n+nb}{abs}\PY{p}{(} \PY{p}{(} \PY{n}{j}\PY{p}{[}\PY{l+m+mi}{25}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{spherical\PYZus{}jn}\PY{p}{(}\PY{l+m+mi}{25}\PY{p}{,} \PY{n}{x}\PY{p}{)} \PY{p}{)}\PY{o}{/} \PY{n}{spherical\PYZus{}jn}\PY{p}{(}\PY{l+m+mi}{25}\PY{p}{,} \PY{n}{x}\PY{p}{)} \PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{l = }\PY{l+s+si}{\PYZob{}}\PY{n}{n}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{n} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}    
+    \PY{k}{return} \PY{n}{j}
+
+\PY{k}{def} \PY{n+nf}{tabla\PYZus{}bessel\PYZus{}down\PYZus{}ajuste}\PY{p}{(}\PY{n}{x}\PY{p}{:} \PY{n+nb}{float}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Esta función imprime una tabla con los valores numéricos para las}
+\PY{l+s+sd}{    primeras 25 funciones de bessel esféricas calculadas por el algoritmo de }
+\PY{l+s+sd}{    Miller con un error relativo menor a 10\PYZca{}(\PYZhy{}10)\PYZdq{}\PYZdq{}\PYZdq{}}
+    
+    \PY{n}{tabla} \PY{o}{=} \PY{n}{PrettyTable}\PY{p}{(}\PY{p}{)} \PY{c+c1}{\PYZsh{} Define la tabla}
+    \PY{n}{tabla}\PY{o}{.}\PY{n}{title} \PY{o}{=} \PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Bessel esférico método down con ajuste: x = }\PY{l+s+si}{\PYZob{}}\PY{n}{x}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{c+c1}{\PYZsh{} Agrega un título}
+    \PY{n}{tabla}\PY{o}{.}\PY{n}{field\PYZus{}names} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{j\PYZus{}l}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Down}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Scipy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Error relativo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{c+c1}{\PYZsh{} Agrega el nombre de las columnas }
+    \PY{n}{j} \PY{o}{=} \PY{n}{bessel\PYZus{}esf\PYZus{}down\PYZus{}ajuste}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+    
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{26}\PY{p}{)}\PY{p}{:}
+        \PY{n}{error} \PY{o}{=} \PY{n+nb}{abs}\PY{p}{(} \PY{p}{(}\PY{n}{j}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{spherical\PYZus{}jn}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{p}{)} \PY{o}{/} \PY{n}{spherical\PYZus{}jn}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{x}\PY{p}{)} \PY{p}{)}
+        \PY{n}{tabla}\PY{o}{.}\PY{n}{add\PYZus{}row}\PY{p}{(}\PY{p}{[}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{j\PYZus{}}\PY{l+s+si}{\PYZob{}}\PY{n}{i}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                    \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{j}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.10e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                    \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{spherical\PYZus{}jn}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.10e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+                    \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{error}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.10e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)} \PY{c+c1}{\PYZsh{}Inserta un registro en forma de lista. El número de elemntos debe coincidir con el número de columnas}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{tabla}\PY{p}{)}              
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{quote}
+La función \emph{bessel\_esf\_down} lo que hace es crear una
+\emph{deque} que es como una lista y les agrega los elementos arbitarios
+\(j_l(x)=1\) y \(j_{l+1}(x)=2\) para comenzar a usar el mecanismo de
+Miller. Luego, con ayuda de un contador \(n\) iniciado en 25 y con
+ayudar de la variable \emph{error} se inicia un cliclo while. Lo primero
+es usar un ciclo for para usar la relación de recurrencia \emph{down} y
+calcular los valores de \(j_i(x)\) donde \(i=0,1,...,n-1\). Así
+calculamos todas las funciones de Bessel esféricas anteriores a partir
+de los valores iniciales \(j_l(x)=1\) y \(j_{l+1}(x)=2\) y las agregamos
+a la lista. De forma que en la posición 0 esté \(j_0(x)\), en la
+posición 1 esté \(j_1(x)\) y así sucesivamente hasta \(j_{25}(x)\) ya
+que solo nos interesan estos valores. Luego de ello, se procede a
+realizar la normalización de \(j_0(x), j_1(x),...,j_{25}(x)\).
+Enseguida, se calcula el error relativo para \(j_{25}(x)\) y se
+reescribe este valor en la variable \emph{error}. Finalmente, nuestro
+contador \(n\) se aumenta en 1. Al término de este proceso, nuevamente
+se evalua la condición *error \textgreater{} 10**(-10)* en el ciclo
+while. Si se cumple, entonces no hemos obtenido la aproximación deseada.
+Por lo que se repite todo el proceso del while pero ahora para la \(n\)
+que ha sido aumentada en 1. Así sucesivamente hasta que se rompa el
+while y obtengamos la aproximación deseada. Cuando eso suceda, la
+función regresará la \emph{deque} que se usó en la función, cuyos
+primeros 26 elementos (del 0 al 25) tendrán nuestras aproximaciones
+deseadas.
+\end{quote}
+
+\begin{quote}
+Por útlimo, la función \emph{tabla\_bessel\_down\_ajuste} usa la
+librería \emph{prettytable} para imprimir la tabla. Esta tabla contendrá
+los valores obtenidos por la función anterior y así nuestros errores
+relativos serán los solicitados. Veamos las tablas de \(x=0.1,1,10\).
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{58}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{tabla\PYZus{}bessel\PYZus{}down\PYZus{}ajuste}\PY{p}{(}\PY{l+m+mf}{0.1}\PY{p}{)}
+\PY{n}{tabla\PYZus{}bessel\PYZus{}down\PYZus{}ajuste}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{tabla\PYZus{}bessel\PYZus{}down\PYZus{}ajuste}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+l = 25
+l = 26
+l = 27
++---------------------------------------------------------------+
+|        Bessel esférico método down con ajuste: x = 0.1        |
++------+------------------+------------------+------------------+
+| j\_l  |       Down       |      Scipy       |  Error relativo  |
++------+------------------+------------------+------------------+
+| j\_0  | 9.9833416647e-01 | 9.9833416647e-01 | 0.0000000000e+00 |
+| j\_1  | 3.3300011903e-02 | 3.3300011903e-02 | 6.2512535349e-16 |
+| j\_2  | 6.6619060845e-04 | 6.6619060845e-04 | 1.1392257878e-15 |
+| j\_3  | 9.5185197209e-06 | 9.5185197209e-06 | 3.5595154377e-16 |
+| j\_4  | 1.0577201502e-07 | 1.0577201502e-07 | 3.0030377615e-15 |
+| j\_5  | 9.6163102329e-10 | 9.6163102329e-10 | 4.3009251601e-16 |
+| j\_6  | 7.3975410936e-12 | 7.3975410936e-12 | 4.3679031004e-16 |
+| j\_7  | 4.9318874757e-14 | 4.9318874757e-14 | 1.9194133908e-15 |
+| j\_8  | 2.9012001025e-16 | 2.9012001025e-16 | 1.5294851906e-15 |
+| j\_9  | 1.5269856935e-18 | 1.5269856935e-18 | 2.3963989381e-15 |
+| j\_10 | 7.2715109967e-21 | 7.2715109967e-21 | 4.9661186614e-15 |
+| j\_11 | 3.1615815052e-23 | 3.1615815052e-23 | 3.7180580317e-16 |
+| j\_12 | 1.2646513379e-25 | 1.2646513379e-25 | 4.5385778182e-15 |
+| j\_13 | 4.6839536653e-28 | 4.6839536653e-28 | 6.7014082214e-15 |
+| j\_14 | 1.6151744028e-30 | 1.6151744028e-30 | 1.3013750669e-15 |
+| j\_15 | 5.2102909410e-33 | 5.2102909410e-33 | 8.4046318154e-15 |
+| j\_16 | 1.5788897129e-35 | 1.5788897129e-35 | 2.7085004743e-15 |
+| j\_17 | 4.5111483007e-38 | 4.5111483007e-38 | 8.7946235683e-15 |
+| j\_18 | 1.2192377198e-40 | 1.2192377198e-40 | 3.3449713916e-15 |
+| j\_19 | 3.1262701152e-43 | 3.1262701152e-43 | 8.5355035003e-15 |
+| j\_20 | 7.6250923124e-46 | 7.6250923124e-46 | 9.7934792491e-15 |
+| j\_21 | 1.7732864463e-48 | 1.7732864463e-48 | 1.2851484112e-14 |
+| j\_22 | 3.9406551793e-51 | 3.9406551793e-51 | 4.2168732861e-15 |
+| j\_23 | 8.3844091285e-54 | 8.3844091285e-54 | 1.1059831688e-15 |
+| j\_24 | 1.7111107510e-56 | 1.7111107510e-56 | 6.7476583961e-15 |
+| j\_25 | 3.3551315322e-59 | 3.3551315322e-59 | 1.3047181832e-14 |
++------+------------------+------------------+------------------+
+l = 25
+l = 26
+l = 27
+l = 28
++---------------------------------------------------------------+
+|         Bessel esférico método down con ajuste: x = 1         |
++------+------------------+------------------+------------------+
+| j\_l  |       Down       |      Scipy       |  Error relativo  |
++------+------------------+------------------+------------------+
+| j\_0  | 8.4147098481e-01 | 8.4147098481e-01 | 0.0000000000e+00 |
+| j\_1  | 3.0116867894e-01 | 3.0116867894e-01 | 5.5295741337e-16 |
+| j\_2  | 6.2035052011e-02 | 6.2035052011e-02 | 2.2370881232e-16 |
+| j\_3  | 9.0065811171e-03 | 9.0065811171e-03 | 0.0000000000e+00 |
+| j\_4  | 1.0110158084e-03 | 1.0110158084e-03 | 1.0723889414e-15 |
+| j\_5  | 9.2561158611e-05 | 9.2561158611e-05 | 8.7850199972e-16 |
+| j\_6  | 7.1569363101e-06 | 7.1569363101e-06 | 1.3018646549e-15 |
+| j\_7  | 4.7901341987e-07 | 4.7901341987e-07 | 1.1051790411e-15 |
+| j\_8  | 2.8264988022e-08 | 2.8264988022e-08 | 1.9900338047e-15 |
+| j\_9  | 1.4913765026e-09 | 1.4913765026e-09 | 2.7732118990e-16 |
+| j\_10 | 7.1165526400e-11 | 7.1165526400e-11 | 3.9955207240e-15 |
+| j\_11 | 3.0995518548e-12 | 3.0995518548e-12 | 2.9970868226e-15 |
+| j\_12 | 1.2416625970e-13 | 1.2416625970e-13 | 1.6264353314e-15 |
+| j\_13 | 4.6046376777e-15 | 4.6046376777e-15 | 5.4822009318e-15 |
+| j\_14 | 1.5895759875e-16 | 1.5895759875e-16 | 1.7059325147e-15 |
+| j\_15 | 5.1326861154e-18 | 5.1326861154e-18 | 2.4014621909e-15 |
+| j\_16 | 1.5567082706e-19 | 1.5567082706e-19 | 4.1754859823e-15 |
+| j\_17 | 4.4511775038e-21 | 4.4511775038e-21 | 4.9014390310e-15 |
+| j\_18 | 1.2038557422e-22 | 1.2038557422e-22 | 3.9057648175e-15 |
+| j\_19 | 3.0887423635e-24 | 3.0887423635e-24 | 3.5678791695e-16 |
+| j\_20 | 7.5377957222e-26 | 7.5377957222e-26 | 1.2640210849e-14 |
+| j\_21 | 1.7538825776e-27 | 1.7538825776e-27 | 6.3406209487e-15 |
+| j\_22 | 3.8993613099e-29 | 3.8993613099e-29 | 6.0373513326e-15 |
+| j\_23 | 8.3001189151e-31 | 8.3001189151e-31 | 1.0551795091e-14 |
+| j\_24 | 1.6945801738e-32 | 1.6945801738e-32 | 0.0000000000e+00 |
+| j\_25 | 3.3239363664e-34 | 3.3239363664e-34 | 2.4457391015e-13 |
++------+------------------+------------------+------------------+
+l = 25
+l = 26
+l = 27
+l = 28
+l = 29
+l = 30
+l = 31
+l = 32
++-----------------------------------------------------------------+
+|          Bessel esférico método down con ajuste: x = 10         |
++------+-------------------+-------------------+------------------+
+| j\_l  |        Down       |       Scipy       |  Error relativo  |
++------+-------------------+-------------------+------------------+
+| j\_0  | -5.4402111089e-02 | -5.4402111089e-02 | 0.0000000000e+00 |
+| j\_1  |  7.8466941799e-02 |  7.8466941799e-02 | 7.0744634567e-16 |
+| j\_2  |  7.7942193629e-02 |  7.7942193629e-02 | 1.7805231238e-16 |
+| j\_3  | -3.9495844984e-02 | -3.9495844984e-02 | 1.2298067644e-15 |
+| j\_4  | -1.0558928512e-01 | -1.0558928512e-01 | 6.5715890549e-16 |
+| j\_5  | -5.5534511621e-02 | -5.5534511621e-02 | 3.7484225761e-16 |
+| j\_6  |  4.4501322334e-02 |  4.4501322334e-02 | 6.2370226681e-16 |
+| j\_7  |  1.1338623066e-01 |  1.1338623066e-01 | 4.8957577045e-16 |
+| j\_8  |  1.2557802365e-01 |  1.2557802365e-01 | 6.6306766444e-16 |
+| j\_9  |  1.0009640955e-01 |  1.0009640955e-01 | 9.7050948274e-16 |
+| j\_10 |  6.4605154493e-02 |  6.4605154493e-02 | 4.5109952333e-15 |
+| j\_11 |  3.5574414886e-02 |  3.5574414886e-02 | 4.4862174206e-15 |
+| j\_12 |  1.7215999745e-02 |  1.7215999745e-02 | 4.6350651183e-15 |
+| j\_13 |  7.4655844766e-03 |  7.4655844766e-03 | 4.2987102224e-15 |
+| j\_14 |  2.9410783418e-03 |  2.9410783418e-03 | 4.4236924549e-15 |
+| j\_15 |  1.0635427146e-03 |  1.0635427146e-03 | 4.2815855554e-15 |
+| j\_16 |  3.5590407351e-04 |  3.5590407351e-04 | 4.7218154903e-15 |
+| j\_17 |  1.1094072797e-04 |  1.1094072797e-04 | 4.6420826810e-15 |
+| j\_18 |  3.2388474389e-05 |  3.2388474389e-05 | 4.6028039766e-15 |
+| j\_19 |  8.8966272694e-06 |  8.8966272694e-06 | 4.5699994208e-15 |
+| j\_20 |  2.3083719613e-06 |  2.3083719613e-06 | 4.9536837995e-15 |
+| j\_21 |  5.6769777198e-07 |  5.6769777198e-07 | 4.8491595607e-15 |
+| j\_22 |  1.3272845821e-07 |  1.3272845821e-07 | 4.1879893668e-15 |
+| j\_23 |  2.9580289943e-08 |  2.9580289943e-08 | 8.9484517064e-15 |
+| j\_24 |  6.2989045263e-09 |  6.2989045263e-09 | 2.9626095365e-13 |
+| j\_25 |  1.2843422360e-09 |  1.2843422360e-09 | 6.7998798626e-12 |
++------+-------------------+-------------------+------------------+
+    \end{Verbatim}
+
+    \begin{quote}
+Como podemos ver, todos los erorres relativos son menores a
+\(10^{-10}\). Además note que antes de cada tabla se imprimen los
+valores que \(l\) va tomando. Estos valores indican a partir de que
+\(l\) se comenzó a usar la relación de recurrencia \emph{down} para
+obtener esos errores relativos. Dado que se tuvo que comenzar
+forzosamente con \(l=25\) para obtener los primeros 25 valores, la
+primer iteración se hace con 25, luego con 26 y así hasta llegar al
+\(l\) que cumple con la condición. Lo sorprendente es que requieren muy
+pocas iteraciones para logar ese error relativo. Por ejemplo, en la
+tabla \(x=0.1\) se comienza con \(l=25\). No se cumple la condición y
+ahora lo realiza con \(l=26\). Tampoco se cumple, así que ahora lo hace
+con \(l=27\). Pero en esta si se cumple. Así que, de la relación de
+recurrencia \emph{down} bastó tomar \(j_{27}(x)=1\) y \(j_{28}(x)=2\)
+como valores iniciales del mecanismo de Miller. Esto permitió que
+\(j_{25}(x)\) al ser normalizado tuviera un erorr relativo menor a
+\(10^{-10}\). Por lo que el ciclo while, ¡solo se repitió 3 veces!. Esto
+es algo demasiado sorprendente. Yo pensé que tomaría mucho más en lograr
+ese error relativo, pero no fue así. Por lo que el mecanismo de Miller
+es una herramienta sumamente poderosa para lograr aproximaciones muy
+precisas de las funciones esféricas de Bessel.
+\end{quote}
+
+    \begin{quote}
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Para este inciso se creo una función que imprima la tabla deseada. Se
+  apoyó de la función \emph{bessel\_esf\_up} y
+  \emph{bessel\_esf\_dow\_ajuste} para imprimir esta nueva tabla. Esta
+  función es muy similar a todas las anteriores que también imprimen una
+  tabla. Al igual se usa la libreía \emph{prettytable} para crear la
+  tabla. La función y el resultado son los siguientes:
+\end{enumerate}
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{59}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{tabla\PYZus{}up\PYZus{}vs\PYZus{}down}\PY{p}{(}\PY{n}{x}\PY{p}{:} \PY{n+nb}{float}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Esta función imprime una tabla que compara los valores numérocos}
+\PY{l+s+sd}{    para las primeras 25 funciones de bessel calculadas por el método up }
+\PY{l+s+sd}{    y por el método down ajustado\PYZdq{}\PYZdq{}\PYZdq{}}
+    
+    \PY{n}{tabla} \PY{o}{=} \PY{n}{PrettyTable}\PY{p}{(}\PY{p}{)} \PY{c+c1}{\PYZsh{}Crea la tabla}
+    \PY{n}{tabla}\PY{o}{.}\PY{n}{title} \PY{o}{=} \PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Bessel up vs down: x = }\PY{l+s+si}{\PYZob{}}\PY{n}{x}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{c+c1}{\PYZsh{}Agrega título}
+    \PY{n}{tabla}\PY{o}{.}\PY{n}{field\PYZus{}names} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{l}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{j\PYZus{}l up}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{j\PYZus{}l down}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{c+c1}{\PYZsh{}Agrega el nombre de las columnas}
+    \PY{n}{j} \PY{o}{=} \PY{n}{bessel\PYZus{}esf\PYZus{}down\PYZus{}ajuste}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+    
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{26}\PY{p}{)}\PY{p}{:}
+        \PY{n}{error} \PY{o}{=} \PY{n+nb}{abs}\PY{p}{(} \PY{n}{bessel\PYZus{}esf\PYZus{}up}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{x}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{j}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{p}{)} \PY{o}{/} \PY{p}{(} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{bessel\PYZus{}esf\PYZus{}up}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{p}{)} \PY{o}{+} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{j}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)} \PY{p}{)}
+        \PY{n}{tabla}\PY{o}{.}\PY{n}{add\PYZus{}row}\PY{p}{(}\PY{p}{[}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{i}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                    \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{bessel\PYZus{}esf\PYZus{}up}\PY{p}{(}\PY{n}{i}\PY{p}{,}\PY{n}{x}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.10e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                    \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{j}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.10e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+                    \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{error}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZlt{}.10e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)} \PY{c+c1}{\PYZsh{}Inserta un registro en la tabla. El número de elementos debe coincidir con el número de columnas   }
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{tabla}\PY{p}{)}   
+
+
+\PY{n}{tabla\PYZus{}up\PYZus{}vs\PYZus{}down}\PY{p}{(}\PY{l+m+mf}{0.1}\PY{p}{)}
+\PY{n}{tabla\PYZus{}up\PYZus{}vs\PYZus{}down}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{tabla\PYZus{}up\PYZus{}vs\PYZus{}down}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+l = 25
+l = 26
+l = 27
++--------------------------------------------------------------+
+|                  Bessel up vs down: x = 0.1                  |
++----+-------------------+------------------+------------------+
+| l  |       j\_l up      |     j\_l down     |      Error       |
++----+-------------------+------------------+------------------+
+| 0  |  9.9833416647e-01 | 9.9833416647e-01 | 0.0000000000e+00 |
+| 1  |  3.3300011903e-02 | 3.3300011903e-02 | 2.4484076345e-14 |
+| 2  |  6.6619060840e-04 | 6.6619060845e-04 | 3.6778032976e-11 |
+| 3  |  9.5185172724e-06 | 9.5185197209e-06 | 1.2861706541e-07 |
+| 4  |  1.0560066988e-07 | 1.0577201502e-07 | 8.1063050260e-04 |
+| 5  | -1.4456983610e-08 | 9.6163102329e-10 | 1.0000000000e+00 |
+| 6  | -1.6958688670e-06 | 7.3975410936e-12 | 1.0000000000e+00 |
+| 7  | -2.2044849573e-04 | 4.9318874757e-14 | 1.0000000000e+00 |
+| 8  | -3.3065578490e-02 | 2.9012001025e-16 | 1.0000000000e+00 |
+| 9  | -5.6209278948e+00 | 1.5269856935e-18 | 1.0000000000e+00 |
+| 10 | -1.0679432344e+03 | 7.2715109967e-21 | 1.0000000000e+00 |
+| 11 | -2.2426245830e+05 | 3.1615815052e-23 | 1.0000000000e+00 |
+| 12 | -5.1579297467e+07 | 1.2646513379e-25 | 1.0000000000e+00 |
+| 13 | -1.2894600104e+10 | 4.6839536653e-28 | 1.0000000000e+00 |
+| 14 | -3.4814904488e+12 | 1.6151744028e-30 | 1.0000000000e+00 |
+| 15 | -1.0096193356e+15 | 5.2102909410e-33 | 1.0000000000e+00 |
+| 16 | -3.1297851253e+17 | 1.5788897129e-35 | 1.0000000000e+00 |
+| 17 | -1.0328189952e+20 | 4.5111483007e-38 | 1.0000000000e+00 |
+| 18 | -3.6148351852e+22 | 1.2192377198e-40 | 1.0000000000e+00 |
+| 19 | -1.3374786904e+25 | 3.1262701152e-43 | 1.0000000000e+00 |
+| 20 | -5.2161307440e+27 | 7.6250923124e-46 | 1.0000000000e+00 |
+| 21 | -2.1386002303e+30 | 1.7732864463e-48 | 1.0000000000e+00 |
+| 22 | -9.1959288288e+32 | 3.9406551793e-51 | 1.0000000000e+00 |
+| 23 | -4.1381465870e+35 | 8.3844091285e-54 | 1.0000000000e+00 |
+| 24 | -1.9449196999e+38 | 1.7111107510e-56 | 1.0000000000e+00 |
+| 25 | -9.5300651483e+40 | 3.3551315322e-59 | 1.0000000000e+00 |
++----+-------------------+------------------+------------------+
+l = 25
+l = 26
+l = 27
+l = 28
++--------------------------------------------------------------+
+|                   Bessel up vs down: x = 1                   |
++----+-------------------+------------------+------------------+
+| l  |       j\_l up      |     j\_l down     |      Error       |
++----+-------------------+------------------+------------------+
+| 0  |  8.4147098481e-01 | 8.4147098481e-01 | 0.0000000000e+00 |
+| 1  |  3.0116867894e-01 | 3.0116867894e-01 | 0.0000000000e+00 |
+| 2  |  6.2035052011e-02 | 6.2035052011e-02 | 1.0626168585e-15 |
+| 3  |  9.0065811171e-03 | 9.0065811171e-03 | 3.7847120744e-14 |
+| 4  |  1.0110158084e-03 | 1.0110158084e-03 | 2.2904083010e-12 |
+| 5  |  9.2561158570e-05 | 9.2561158611e-05 | 2.2147050060e-10 |
+| 6  |  7.1569358637e-06 | 7.1569363101e-06 | 3.1183670799e-08 |
+| 7  |  4.7900765821e-07 | 4.7901341987e-07 | 6.0141358091e-06 |
+| 8  |  2.8179009348e-08 | 2.8264988022e-08 | 1.5232562895e-03 |
+| 9  |  3.5500713480e-11 | 1.4913765026e-09 | 9.5349892826e-01 |
+| 10 | -2.7504495792e-08 | 7.1165526400e-11 | 1.0000000000e+00 |
+| 11 | -5.7762991235e-07 | 3.0995518548e-12 | 1.0000000000e+00 |
+| 12 | -1.3257983488e-05 | 1.2416625970e-13 | 1.0000000000e+00 |
+| 13 | -3.3087195729e-04 | 4.6046376777e-15 | 1.0000000000e+00 |
+| 14 | -8.9202848634e-03 | 1.5895759875e-16 | 1.0000000000e+00 |
+| 15 | -2.5835738908e-01 | 5.1326861154e-18 | 1.0000000000e+00 |
+| 16 | -8.0001587767e+00 | 1.5567082706e-19 | 1.0000000000e+00 |
+| 17 | -2.6374688224e+02 | 4.4511775038e-21 | 1.0000000000e+00 |
+| 18 | -9.2231407196e+03 | 1.2038557422e-22 | 1.0000000000e+00 |
+| 19 | -3.4099245974e+05 | 3.0887423635e-24 | 1.0000000000e+00 |
+| 20 | -1.3289482789e+07 | 7.5377957222e-26 | 1.0000000000e+00 |
+| 21 | -5.4452780190e+08 | 1.7538825776e-27 | 1.0000000000e+00 |
+| 22 | -2.3401405999e+10 | 3.8993613099e-29 | 1.0000000000e+00 |
+| 23 | -1.0525187422e+12 | 8.3001189151e-31 | 1.0000000000e+00 |
+| 24 | -4.9444979475e+13 | 1.6945801738e-32 | 1.0000000000e+00 |
+| 25 | -2.4217514755e+15 | 3.3239363664e-34 | 1.0000000000e+00 |
++----+-------------------+------------------+------------------+
+l = 25
+l = 26
+l = 27
+l = 28
+l = 29
+l = 30
+l = 31
+l = 32
++---------------------------------------------------------------+
+|                   Bessel up vs down: x = 10                   |
++----+-------------------+-------------------+------------------+
+| l  |       j\_l up      |      j\_l down     |      Error       |
++----+-------------------+-------------------+------------------+
+| 0  | -5.4402111089e-02 | -5.4402111089e-02 | 0.0000000000e+00 |
+| 1  |  7.8466941799e-02 |  7.8466941799e-02 | 3.5372317283e-16 |
+| 2  |  7.7942193629e-02 |  7.7942193629e-02 | 8.9026156192e-17 |
+| 3  | -3.9495844984e-02 | -3.9495844984e-02 | 6.1490338220e-16 |
+| 4  | -1.0558928512e-01 | -1.0558928512e-01 | 3.2857945274e-16 |
+| 5  | -5.5534511621e-02 | -5.5534511621e-02 | 6.2473709602e-17 |
+| 6  |  4.4501322334e-02 |  4.4501322334e-02 | 4.6777670010e-16 |
+| 7  |  1.1338623066e-01 |  1.1338623066e-01 | 2.4478788522e-16 |
+| 8  |  1.2557802365e-01 |  1.2557802365e-01 | 2.2102255481e-16 |
+| 9  |  1.0009640955e-01 |  1.0009640955e-01 | 2.0796631773e-16 |
+| 10 |  6.4605154493e-02 |  6.4605154493e-02 | 4.2961859365e-16 |
+| 11 |  3.5574414886e-02 |  3.5574414886e-02 | 7.8021172533e-16 |
+| 12 |  1.7215999745e-02 |  1.7215999745e-02 | 2.0152457036e-15 |
+| 13 |  7.4655844766e-03 |  7.4655844766e-03 | 8.1907856940e-15 |
+| 14 |  2.9410783418e-03 |  2.9410783418e-03 | 4.4679293794e-14 |
+| 15 |  1.0635427146e-03 |  1.0635427146e-03 | 3.0073041401e-13 |
+| 16 |  3.5590407351e-04 |  3.5590407351e-04 | 2.4168841062e-12 |
+| 17 |  1.1094072797e-04 |  1.1094072797e-04 | 2.2701555631e-11 |
+| 18 |  3.2388474374e-05 |  3.2388474389e-05 | 2.4560248198e-10 |
+| 19 |  8.8966272156e-06 |  8.8966272694e-06 | 3.0251708214e-09 |
+| 20 |  2.3083717673e-06 |  2.3083719613e-06 | 4.2024944301e-08 |
+| 21 |  5.6769703033e-07 |  5.6769777198e-07 | 6.5320696803e-07 |
+| 22 |  1.3272546314e-07 |  1.3272845821e-07 | 1.1282813646e-05 |
+| 23 |  2.9567553789e-08 |  2.9580289943e-08 | 2.1532744843e-04 |
+| 24 |  6.2420396684e-09 |  6.2989045263e-09 | 4.5343362561e-03 |
+| 25 |  1.0184405863e-09 |  1.2843422360e-09 | 1.1546970348e-01 |
++----+-------------------+-------------------+------------------+
+    \end{Verbatim}
+
+    \begin{quote}
+Como ya se vió antes, el método \emph{up} no fue adecuado para obtener
+las aproximaciones deseadas, porque había valores en los que
+\(j_l^{up}\) arrojaba un valor muy grande que no tenía nada que ver con
+la respuesta correcta. Mientras que con el mecanismo de Miller fue
+sencillo controlar las aproximaciones y obtener estimaciones muy
+cercanas. Estás diferencias se notan claramente en las columnas 2 y 3 de
+las tablas anteriores.
+\end{quote}
+
+\begin{quote}
+Ahora analicemos más a detalle la columna 4. Esta columan contiene el
+siguiente valor:
+\[\dfrac{|j_{l}^{up}-j_l^{down}|}{|j_{l}^{up}| + |j_l^{down}|} \tag{5}\]
+Podemos ver de las tablas que para algunas \(l's\), se cumple que
+\(|j_{l}^{up}|\gg|j_l^{down}|\). Cuando esto sucede, en el cálculo de la
+fórmula (5), la computadora puede interpretar lo siguiente:
+\[|j_{l}^{up}-j_l^{down}|\approx|j_{l}^{up}|\quad;\quad |j_{l}^{up}| + |j_l^{down}|\approx |j_{l}^{up}| \]
+Por lo que ese cálculo arrojaría como respuesta 1. En efecto, esto
+sucede en las tablas para \(x=0.1\) y \(x=1\). Todo debido a que los
+valores calculados por el método up divergen muy rápido y arroja valores
+grandes para \(x\) pequeñas como lo son 0.1 y 1.
+\end{quote}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
